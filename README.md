@@ -23,7 +23,7 @@ pip3 install -r requirements.txt
 ```
 
 ## Inference in a few lines
-We provide a helper class to simplify writing inference pipelines using pre-trained models. Here is how we would do it. Run following code from the `demo` folder. (The pre-trained model and sample images can be downloaded from here \[[Baidu](https://pan.baidu.com/s/1z4ABZj9xEaLRvsGO8k6I7g)\]\[[OneDrive](https://1drv.ms/u/s!AhR-Vmbz4T6-dtV6MFbqdsw89XI?e=te5sU7)\]. You can choose any config in `./configs`)
+We provide a helper class to simplify writing inference pipelines using pre-trained models. Here is how we would do it. Run following code from the `demo` folder. (The pre-trained model and sample images can be downloaded from here \[[Baidu](https://pan.baidu.com/s/1z4ABZj9xEaLRvsGO8k6I7g)(PWD: f25u)\]\[[OneDrive](https://1drv.ms/u/s!AhR-Vmbz4T6-dtV6MFbqdsw89XI?e=te5sU7)\]. You can choose any config in `./configs`)
 ```python
 import sys
 
@@ -49,7 +49,7 @@ pred = cls_demo.run_on_openv_image(image)
 ```
 
 ## Perform training on CIFAR-10 dataset
-You need to download the CIFAR-10 dataset and convert it the required `GeneralDataset` format in this codebase. (You can also download from here \[[Baidu](https://pan.baidu.com/s/1z4ABZj9xEaLRvsGO8k6I7g)\]\[[OneDrive](https://1drv.ms/u/s!AhR-Vmbz4T6-dtV6MFbqdsw89XI?e=te5sU7)\], which has been reformatted.)
+You need to download the CIFAR-10 dataset and convert it the required `GeneralDataset` format in this codebase. (You can also download from here \[[Baidu](https://pan.baidu.com/s/1z4ABZj9xEaLRvsGO8k6I7g)(PWD: f25u)\]\[[OneDrive](https://1drv.ms/u/s!AhR-Vmbz4T6-dtV6MFbqdsw89XI?e=te5sU7)\], which has been reformatted.)
 We recommend to symlink the path to the cifar-10 dataset to `./datasets` as follows
 
 
