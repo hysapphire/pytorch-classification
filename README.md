@@ -1,12 +1,12 @@
-# Config is All You Need: An Image Classification Codebase Written in PyTorch
+# Config File is All You Need: An Image Classification Codebase Written in PyTorch
 
 This project aims at providing the necessary building blocks for easily creating an image classification model using PyTorch.
 
-I finished this project in my spare time within a week. So there is still a lot of work to be done.
+**Note:** I finished this project in my spare time within a week. So there is still a lot of work to be done.
 
 
 ## Highlights
-- **Convenient:** You can use the config files to create an image classification model and train on your own datasets without write any code.
+- **Convenient:** You can use a config file to create an image classification model and train on your own datasets without writing any code.
 - **Extensible:** You can write your own modules (Dataset, Transform, Network, Loss and so on) and register them to the default config easily.
 - **Parameter-is-Module:** You can create a module by the parameter which is consisted of a module name and an argument list.
 - **Multi-GPU training and inference:** You can train your model on one GPU or use multi-GPU to train the model in parallel.
@@ -14,7 +14,7 @@ I finished this project in my spare time within a week. So there is still a lot 
 
 ## Accuracy
 
-**TODO**: List the accuracy of different models in CIFAR-10.
+**TODO:** List the accuracy of different models in CIFAR-10.
 
 
 ## Installation
