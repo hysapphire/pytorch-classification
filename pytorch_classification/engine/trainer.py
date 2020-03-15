@@ -137,7 +137,7 @@ def run_train(
             acc = inference(model, val_loader, device)
 
             if acc is not None:
-                logger.info("Top accuracy: {}. Top5 accuracy: {}.".format(acc["top1"], acc["top5"]))
+                logger.info("Top1 accuracy: {}. Top5 accuracy: {}.".format(acc["top1"], acc["top5"]))
 
         epoch_time = time.time() - end
         end = time.time()
