@@ -13,8 +13,6 @@ from pytorch_classification.utils.logger import setup_logger
 from pytorch_classification.utils.miscellaneous import print_dict_data, save_dict_data
 from torch.utils.collect_env import get_pretty_env_info
 
-sys.path.append(".")
-
 
 def main():
     parser = argparse.ArgumentParser(description="PyTorch Classification Training.")
