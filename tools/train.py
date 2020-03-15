@@ -7,6 +7,7 @@ import os
 
 import torch
 from torch.utils.collect_env import get_pretty_env_info
+from torch.utils.tensorboard import SummaryWriter
 from pytorch_classification.config import cfg
 from pytorch_classification.engine.trainer import run_train
 from pytorch_classification.engine.tester import run_test
@@ -54,8 +55,10 @@ def main():
         synchronize()
 
     output_dir = cfg.OUTPUT_DIR
-    if output_dir:
-        mkdir(output_dir)
+    tb_dir = os.path.join(output_dir, 'tb_log')
+    mkdir(tb_dir)
+    
+    tb_writer = SummaryWriter(tb_dir)
 
     logger = setup_logger("Classification", output_dir, get_rank())
 
@@ -75,7 +78,7 @@ def main():
     logger.info("Saving config into: {}".format(output_config_path))
     save_config(cfg, output_config_path)
 
-    model = run_train(cfg, args.local_rank, distributed)
+    model = run_train(cfg, args.local_rank, distributed, tb_writer)
 
     if not args.skip_test:
         acc = run_test(cfg, args.local_rank, distributed, model)
