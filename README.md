@@ -13,8 +13,17 @@ This project aims at providing the necessary building blocks for easily creating
 
 
 ## Accuracy
+The top-1 accuracy (%) of different models in CIFAR-10 are shown as below. `NETWORK_STRIDE` is set to `(2,2,2,2,2)` and `(1,1,2,2,2)` respectively. Refer to [DETAILS.md](DETAILS.md) for more details about the parameter `NETWORK_STRIDE`.
 
-**TODO:** List the accuracy of different models in CIFAR-10.
+| Model                   | (2,2,2,2,2)        | (1,1,2,2,2)        |
+| ----------------------- | :----------------: | :----------------: |
+| ResNet-18               | 86.10              | 92.64              |
+| ResNet-34               | 86.14              | 92.73              |
+| ResNet-50               | 86.65              | 92.20              |
+| ResNet-101              | 87.41              | 93.27              |
+| ResNet-152              | 87.01              | 93.25              |
+| ResNeXt-50, 32x4d       | 87.56              | 93.65              |
+| ResNeXt-101, 32x8d      | 88.24              | 93.75              |
 
 
 ## Installation
@@ -64,14 +73,14 @@ You can also configure your own paths to the datasets. For that, all you need to
 ### Single GPU training
 You can run the following without modifications to train your model on a single GPU.
 ```bash
-python tools/train.py --config-file "configs/config_cifar10_R50_1gpu.yaml"
+python3 tools/train.py --config-file "configs/config_cifar10_R50_1gpu.yaml"
 ```
 ### Multi-GPU training
 We use internally `torch.distributed.launch` in order to launch multi-GPU training. This utility function from PyTorch spawns as many Python processes as the number of GPUs we want to use, and each Python process will only use a single GPU.
 
 ```bash
 export NGPUS=8
-python -m torch.distributed.launch --nproc_per_node=$NGPUS tools/train.py --config-file "configs/config_cifar10_R50_8gpu.yaml"
+python3 -m torch.distributed.launch --nproc_per_node=$NGPUS tools/train.py --config-file "configs/config_cifar10_R50_8gpu.yaml"
 ```
 If you want to train your model on more GPUs, you should change the batch size `SOLVER.BATCH_SIZE` and learning rate `SOLVER.BASE_LR` adaptively.
 
@@ -79,7 +88,7 @@ If you want to train your model on more GPUs, you should change the batch size `
 You can test your model directly on single or multiple GPUs. Here is an example for multi-GPU testing:
 ```bash
 export NGPUS=8
-python -m torch.distributed.launch --nproc_per_node=$NGPUS tools/test.py --config-file "configs/config_cifar10_R50_8gpu.yaml"
+python3 -m torch.distributed.launch --nproc_per_node=$NGPUS tools/test.py --config-file "configs/config_cifar10_R50_8gpu.yaml"
 ```
 
 ## Details
