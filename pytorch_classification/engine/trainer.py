@@ -14,7 +14,7 @@ from pytorch_classification.utils.metric_logger import AverageMeter, MetricLogge
 
 
 def train(
-    model, epoch, max_epoch, data_loader, optimizer, criterion, device, print_iter_period, logger,
+    model, epoch, max_epoch, data_loader, optimizer, criterion, device, print_iter_period, logger, tb_writer,
 ):
     meters = MetricLogger()
     max_iter = len(data_loader)
@@ -34,6 +34,9 @@ def train(
         meters.update(
             size=images.size(0), loss=loss, top1=acc1, top5=acc5,
         )
+
+        if get_rank() == 0:
+            tb_writer.add_scalar('Iter Loss', meters.loss.value, epoch * max_iter + iteration)
 
         optimizer.zero_grad()
         loss.backward()
@@ -64,10 +67,13 @@ def train(
                     memory=torch.cuda.max_memory_allocated() / 1024.0 / 1024.0,
                 )
             )
+    if get_rank() == 0:
+        tb_writer.add_scalar('Epoch Loss', meters.loss.avg, epoch + 1)
+        tb_writer.add_scalar('Train Accuracy', meters.top1.avg, epoch + 1)
 
 
 def run_train(
-    cfg, local_rank, distributed,
+    cfg, local_rank, distributed, tb_writer,
 ):
     logger = logging.getLogger("Classification.trainer")
 
@@ -121,6 +127,7 @@ def run_train(
             device,
             print_iter_period,
             logger,
+            tb_writer,
         )
 
         if save_to_disk and ((epoch + 1) % save_epoch_period == 0 or (epoch + 1) == max_epoch):
@@ -138,6 +145,8 @@ def run_train(
 
             if acc is not None:
                 logger.info("Top1 accuracy: {}. Top5 accuracy: {}.".format(acc["top1"], acc["top5"]))
+
+                tb_writer.add_scalar('Test Accuracy', acc["top1"], epoch + 1)
 
         epoch_time = time.time() - end
         end = time.time()
