@@ -1,20 +1,29 @@
-# Config is All You Need: An Image Classification Codebase Written in PyTorch
+# Config File is All You Need: An Image Classification Codebase Written in PyTorch
 
 This project aims at providing the necessary building blocks for easily creating an image classification model using PyTorch.
 
-I finished this project in my spare time within a week. So there is still a lot of work to be done.
+**Note:** I finished this project in my spare time within a week. So there is still a lot of work to be done.
 
 
 ## Highlights
-- **Convenient:** You can use the config files to create an image classification model and train on your own datasets without write any code.
+- **Convenient:** You can use a config file to create an image classification model and train on your own datasets without writing any code.
 - **Extensible:** You can write your own modules (Dataset, Transform, Network, Loss and so on) and register them to the default config easily.
 - **Parameter-is-Module:** You can create a module by the parameter which is consisted of a module name and an argument list.
 - **Multi-GPU training and inference:** You can train your model on one GPU or use multi-GPU to train the model in parallel.
 
 
 ## Accuracy
+The top-1 accuracy (%) of different models in CIFAR-10 are shown as below. `NETWORK_STRIDE` is set to `(2,2,2,2,2)` and `(1,1,2,2,2)` respectively. Refer to [DETAILS.md](DETAILS.md) for more details about the parameter `NETWORK_STRIDE`.
 
-**TODO**: List the accuracy of different models in CIFAR-10.
+| Model                   | (2,2,2,2,2)        | (1,1,2,2,2)        |
+| ----------------------- | :----------------: | :----------------: |
+| ResNet-18               | 86.10              | 92.64              |
+| ResNet-34               | 86.14              | 92.73              |
+| ResNet-50               | 86.65              | 92.20              |
+| ResNet-101              | 87.41              | 93.27              |
+| ResNet-152              | 87.01              | 93.25              |
+| ResNeXt-50, 32x4d       | 87.56              | 93.65              |
+| ResNeXt-101, 32x8d      | 88.24              | 93.75              |
 
 
 ## Installation
@@ -64,14 +73,14 @@ You can also configure your own paths to the datasets. For that, all you need to
 ### Single GPU training
 You can run the following without modifications to train your model on a single GPU.
 ```bash
-python tools/train.py --config-file "configs/config_cifar10_R50_1gpu.yaml"
+python3 tools/train.py --config-file "configs/config_cifar10_R50_1gpu.yaml"
 ```
 ### Multi-GPU training
 We use internally `torch.distributed.launch` in order to launch multi-GPU training. This utility function from PyTorch spawns as many Python processes as the number of GPUs we want to use, and each Python process will only use a single GPU.
 
 ```bash
 export NGPUS=8
-python -m torch.distributed.launch --nproc_per_node=$NGPUS tools/train.py --config-file "configs/config_cifar10_R50_8gpu.yaml"
+python3 -m torch.distributed.launch --nproc_per_node=$NGPUS tools/train.py --config-file "configs/config_cifar10_R50_8gpu.yaml"
 ```
 If you want to train your model on more GPUs, you should change the batch size `SOLVER.BATCH_SIZE` and learning rate `SOLVER.BASE_LR` adaptively.
 
@@ -79,7 +88,7 @@ If you want to train your model on more GPUs, you should change the batch size `
 You can test your model directly on single or multiple GPUs. Here is an example for multi-GPU testing:
 ```bash
 export NGPUS=8
-python -m torch.distributed.launch --nproc_per_node=$NGPUS tools/test.py --config-file "configs/config_cifar10_R50_8gpu.yaml"
+python3 -m torch.distributed.launch --nproc_per_node=$NGPUS tools/test.py --config-file "configs/config_cifar10_R50_8gpu.yaml"
 ```
 
 ## Details
