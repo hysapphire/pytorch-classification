@@ -39,6 +39,8 @@ def synchronize():
 
 def all_gather_tensor(data):
     world_size = get_world_size()
+    if world_size == 1:
+        return [data]
     data_list = [torch.ones_like(data) for _ in range(world_size)]
     dist.all_gather(data_list, data)
 
