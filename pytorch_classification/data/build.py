@@ -27,16 +27,23 @@ def build_dataset(dataset_list, transforms, is_train):
     return dataset
 
 
+def make_data_sampler(dataset, shuffle, distributed):
+    if distributed:
+        return torch.utils.data.distributed.DistributedSampler(dataset, shuffle=shuffle)
+    if shuffle:
+        sampler = torch.utils.data.sampler.RandomSampler(dataset)
+    else:
+        sampler = torch.utils.data.sampler.SequentialSampler(dataset)
+    return sampler
+
+
 def make_data_loader(cfg, is_train=True, is_distributed=False):
     dataset_list = cfg.DATASETS.TRAIN if is_train else cfg.DATASETS.TEST
 
     transforms = T.build_transforms(cfg, is_train=is_train)
     datasets = build_dataset(dataset_list, transforms, is_train)
 
-    if is_train and is_distributed:
-        sampler = torch.utils.data.distributed.DistributedSampler(datasets)
-    else:
-        sampler = None
+    sampler = make_data_sampler(datasets, is_train, is_distributed)
 
     num_gpus = get_world_size()
     batch_size = cfg.SOLVER.BATCH_SIZE if is_train else cfg.TEST.BATCH_SIZE
@@ -45,7 +52,6 @@ def make_data_loader(cfg, is_train=True, is_distributed=False):
     data_loader = torch.utils.data.DataLoader(
         datasets,
         batch_size=batch_size,
-        shuffle=(sampler is None and is_train),
         num_workers=cfg.WORKERS,
         pin_memory=True,
         sampler=sampler,

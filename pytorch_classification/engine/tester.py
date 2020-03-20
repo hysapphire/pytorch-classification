@@ -61,8 +61,8 @@ def inference(
 
             outputs = model(images)
             synchronize()
-            output = _accumulate_values_from_multiple_gpus(outputs)
-            target = _accumulate_values_from_multiple_gpus(targets)
+            outputs = _accumulate_values_from_multiple_gpus(outputs)
+            targets = _accumulate_values_from_multiple_gpus(targets)
             synchronize()
             if not is_main_process():
                 continue
@@ -91,7 +91,7 @@ def run_test(cfg, local_rank, distributed, model=None):
             )
 
         checkpoint_path = (
-            cfg.CHECKPOINT if cfg.CHECKPOINT else os.path.join(cfg.OUTPUT_DIR, "model-final.pth")
+            cfg.CHECKPOINT if cfg.CHECKPOINT else os.path.join(cfg.OUTPUT_DIR, "final-model.pth")
         )
         checkpoint = load_checkpoint(checkpoint_path, distributed)
 
